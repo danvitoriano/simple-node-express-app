@@ -7,7 +7,7 @@ const port = 3000
 app.use(express.json());
 
 // mongoose
-mongoose.connect('mongodb://127.0.0.1:27017/blog', { useNewUrlParser: true });
+mongoose.connect('mongodb://192.168.99.100:27017/blog', { useNewUrlParser: true });
 var db = mongoose.connection;
 var blogSchema = new mongoose.Schema({
     name: String
@@ -23,6 +23,13 @@ db.once('open', function () {
 // routes
 app.get('/', (req, res) => {
     Blog.find(function (err, posts) {
+        if (err) return console.error(err);
+        res.json(posts)
+    })
+})
+
+app.get('/:id', (req, res) => {
+    Blog.findById(req.params.id,function (err, posts) {
         if (err) return console.error(err);
         res.json(posts)
     })
